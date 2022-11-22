@@ -17,8 +17,8 @@ export default function handler(
 
   if (questionsSelected.length === 1) {
     const idQuestion = questionsSelected[0].shuffleResponses();
-    const obj = idQuestion.replyWith(0).toObject();
-    res.status(200).json(obj);
+
+    res.status(200).json(idQuestion.toObject());
   } else {
     res.status(204).send();
   }
