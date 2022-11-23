@@ -7,8 +7,6 @@ export default class QuestionModel {
   #responses: ResponseModel[];
   #responseRight: boolean;
 
-  // #answered: boolean;
-
   constructor(
     id: number,
     enunciate: string,
@@ -34,6 +32,10 @@ export default class QuestionModel {
     return this.#responseRight;
   }
 
+  get noAnswered() {
+    return !this.answered;
+  }
+
   get answered() {
     for (let response of this.#responses) {
       if (response.answerRevealed) return true;
@@ -41,10 +43,10 @@ export default class QuestionModel {
     return false;
   }
 
-  replyWith(indice: number): QuestionModel {
-    const responseRight = this.#responses[indice]?.certain;
+  replyWith(index: number): QuestionModel {
+    const responseRight = this.#responses[index]?.certain;
     const responses = this.#responses.map((response, i) => {
-      const responseSelected = indice === i;
+      const responseSelected = index === i;
       const mustReveal = responseSelected || response.certain;
       return mustReveal ? response.toReveal() : response;
     });
@@ -58,6 +60,18 @@ export default class QuestionModel {
       this.#enunciate,
       responseShuffle,
       this.#responseRight
+    );
+  }
+
+  static createUsedObj(obj: QuestionModel): QuestionModel {
+    const responses = obj.responses.map((resp) =>
+      ResponseModel.createUsedObj(resp)
+    );
+    return new QuestionModel(
+      obj.id,
+      obj.enunciate,
+      responses,
+      obj.responseRight
     );
   }
 
