@@ -19,7 +19,25 @@ module.exports = {
           600: "#e44a4c",
         },
       },
+
+      animation: {
+        rotate3d: "rotate3D 1s ease-in-out ",
+      },
+
+      keyframes: {
+        rotate3D: {
+          "0%": {
+            transform: "rotateY(0deg)",
+          },
+
+          "100%": {
+            transform: "rotateY(180deg)",
+            perspective: "10000px",
+          },
+        },
+      },
     },
   },
+
   plugins: [],
 };
