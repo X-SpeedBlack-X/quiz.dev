@@ -16,7 +16,7 @@ export function Quiz(props: QuizProps) {
     }
   }
   return (
-    <div className="flex flex-col justify-center items-center py-9">
+    <div className="flex flex-col justify-center items-center text-center py-9">
       {props.question ? (
         <Questions
           value={props.question}
