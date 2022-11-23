@@ -1,33 +1,77 @@
-import { useState } from "react";
-import { Questions } from "../components/Questions";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { Quiz } from "../components/Quiz";
 import QuestionModel from "../model/question";
-import ResponseModel from "../model/response";
 
-const questionsMock = new QuestionModel(1, "Qual é a Melhor cor?", [
-  ResponseModel.responseWrong("Verde"),
-  ResponseModel.responseWrong("Roxo"),
-  ResponseModel.responseWrong("Branca"),
-  ResponseModel.responseRight("Preto"),
-]);
+const BASE_URL = "http://localhost:3000/api";
 
 export default function Home() {
-  const [question, setQuestion] = useState(questionsMock);
+  const router = useRouter();
 
-  function onResponse(indice: number) {
-    setQuestion(question.replyWith(indice));
+  const [idsQuestions, setIdsQuestions] = useState<number[]>([]);
+  const [question, setQuestion] = useState<QuestionModel>();
+  const [responsesRight, setResponsesRight] = useState<number>(0);
+
+  async function loadingQuestionsIds() {
+    const resp = await fetch(`${BASE_URL}/quiz`);
+    const idsQuestions = await resp.json();
+    setIdsQuestions(idsQuestions);
   }
 
-  function timeUp() {
-    if (!question.answered) {
-      setQuestion(question.replyWith(-1));
-    }
+  async function loadingQuestion(idQuestion: number) {
+    const resp = await fetch(`${BASE_URL}/questions/${idQuestion}`);
+    const json = await resp.json();
+    const newQuestion = QuestionModel.createUsedObj(json);
+
+    setQuestion(newQuestion);
   }
 
-  return (
-    <div className="py-8">
-      <div className="flex justify-center items-center h-screen ">
-        <Questions value={question} onResponse={onResponse} timeUp={timeUp} />
-      </div>
-    </div>
+  useEffect(() => {
+    loadingQuestionsIds();
+  }, []);
+
+  useEffect(() => {
+    idsQuestions.length > 0 && loadingQuestion(idsQuestions[0]);
+  }, [idsQuestions]);
+
+  function questionAnswered(questionAnswered: QuestionModel) {
+    setQuestion(questionAnswered);
+    const certain = questionAnswered.responseRight;
+    setResponsesRight(responsesRight + (certain ? 1 : 0));
+  }
+
+  function nextQuestionId() {
+    const nextIndex = idsQuestions.indexOf(question.id) + 1;
+    return idsQuestions[nextIndex];
+  }
+
+  function nextQuestion(nextId: number) {
+    loadingQuestion(nextId);
+  }
+
+  function finalize() {
+    router.push({
+      pathname: "/resulte",
+      query: {
+        total: idsQuestions.length,
+        responsesRight: responsesRight,
+      },
+    });
+  }
+
+  function nextStep() {
+    const nextId = nextQuestionId();
+    nextId ? nextQuestion(nextId) : finalize();
+  }
+
+  return question ? (
+    <Quiz
+      question={question}
+      lastQuestion={nextQuestionId() === undefined}
+      questionAnswered={questionAnswered}
+      nextStep={nextStep}
+    />
+  ) : (
+    false
   );
 }
