@@ -37,6 +37,13 @@ const questions: QuestionModel[] = [
       ResponseModel.responseRight("Escaleno"),
     ]
   ),
+
+  new QuestionModel(205, "Quem compôs o Hino da Independência?", [
+    ResponseModel.responseWrong("Castro Alves"),
+    ResponseModel.responseWrong("Manuel Bandeira"),
+    ResponseModel.responseWrong("Carlos Gomes"),
+    ResponseModel.responseRight("Dom Pedro I"),
+  ]),
 ];
 
 export default questions;
