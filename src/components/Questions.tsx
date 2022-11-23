@@ -24,7 +24,8 @@ const letters = [
 
 type QuestionsProps = {
   value: QuestionModel;
-  onResponse: (indice: number) => void;
+  onResponse: (index: number) => void;
+  timeForAnswer?: number;
   timeUp: () => void;
 };
 
@@ -35,9 +36,9 @@ export function Questions(props: QuestionsProps) {
     return question.responses.map((response, i) => {
       return (
         <Response
-          key={i}
+          key={`${question.id}-${i}`}
           value={response}
-          indice={i}
+          index={i}
           letter={letters[i].valor}
           letterBg={letters[i].bg}
           onResponse={props.onResponse}
@@ -49,7 +50,11 @@ export function Questions(props: QuestionsProps) {
   return (
     <div className="flex flex-col items-center">
       <Enunciate text={question.enunciate} />
-      <Countdown duration={10} timeUp={props.timeUp} />
+      <Countdown
+        key={question.id}
+        duration={props.timeForAnswer ?? 10}
+        timeUp={props.timeUp}
+      />
       {renderResponse()}
     </div>
   );
