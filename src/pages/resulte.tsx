@@ -20,7 +20,7 @@ export default function resulte() {
           text="Percentual"
           value={`${percentage}%`}
           color="#efefef"
-          bg={percentage < total ? "#e32b0b" : "#08bf14"}
+          bg={percentage < 50 ? "#e32b0b" : "#08bf14"}
         />
       </div>
       <Button text="Jogar novamente" href="/" />
