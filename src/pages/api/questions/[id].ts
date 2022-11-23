@@ -1,16 +1,18 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from "next";
 import questions from "../bankQuestions";
 
-type Data = {
-  name: string;
+type questionIdProps = {
+  req: any;
+  res: any;
+  query: any;
+  status: any;
 };
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
+export default function questionsId(
+  req: questionIdProps,
+  res: questionIdProps
 ) {
   const idSelected = +req.query.id;
+
   const questionsSelected = questions.filter(
     (question) => question.id === idSelected
   );
@@ -22,5 +24,4 @@ export default function handler(
   } else {
     res.status(204).send();
   }
-  res.status(200).json(questions[0].toObject());
 }
