@@ -3,6 +3,7 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 type CountdownProps = {
   duration: number;
   timeUp: () => void;
+  key: any;
 };
 export function Countdown(props: CountdownProps) {
   return (
@@ -14,7 +15,6 @@ export function Countdown(props: CountdownProps) {
         onComplete={props.timeUp}
         colors={["#bce596", "#f7b801", "#ed827a", "#A30000"]}
         colorsTime={[7, 4, 2, 0]}
-        initialRemainingTime={10}
       >
         {({ remainingTime }) => remainingTime}
       </CountdownCircleTimer>
