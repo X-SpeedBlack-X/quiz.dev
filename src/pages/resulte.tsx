@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { Button } from "../components/Button";
 import { Statistic } from "../components/Statistic";
 
-export default function resulte() {
+export default function Resulte() {
   const router = useRouter();
 
   const total = +router.query.total;
