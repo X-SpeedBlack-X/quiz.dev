@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Quiz } from "../components/Quiz";
 import QuestionModel from "../model/question";
 
-const BASE_URL = "http://localhost:3000/api";
+const BASE_URL = "https://quiz-of-dev.vercel.app/api";
 
 export default function Home() {
   const router = useRouter();
